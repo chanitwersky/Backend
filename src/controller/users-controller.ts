@@ -7,14 +7,14 @@ export default class UsersController {
 
     async createUser(req: Request, res: Response,next: NextFunction): Promise<void> {
             try {
-                const { id, name, phoneNumber ,role} = req.body;
+                const { id, name, phoneNumber ,password,role} = req.body;
     
                 if (!id) {
                     res.status(400).json({ message: "נא לספק את פרטיך"});
                     return;
                 }
 
-                const userId = await this.usersService.createUser(id, name, phoneNumber,role);
+                const userId = await this.usersService.createUser(id, name, phoneNumber,password,role);
                 res.status(200).json({
                     success: true,
                     token: userId.token,

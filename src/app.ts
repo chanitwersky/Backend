@@ -9,8 +9,10 @@ dotenv.config();
 import PromptsService from "./serviceLayer/prompts-service";
 import PromptsDal from "./dalLayer/prompts-dal"; 
 import PromptsApi from "./routes/prompts-api";
-import SubCategoriesDal from "./dalLayer/Categories-dal";
+import CategoriesDal from "./dalLayer/Categories-dal";
 import MiddlewareHandler from "./middleware/middleware-handler";
+import CategoriesService from "./serviceLayer/categories-service";
+import CategoriesApi from "./routes/categories-api";
 
 const HOST = "127.0.0.1";
 const PORT = 5000;
@@ -34,23 +36,27 @@ export default class App {
         const usersService = new UsersService(usersDal);
         const userApi = new UsersApi(usersService);
 
-        const subCategoriesDal = new SubCategoriesDal(this.dbConn);
+        const categoriesDal = new CategoriesDal(this.dbConn);
+        const categoriesService = new CategoriesService(categoriesDal);
+        const categoriesApi = new CategoriesApi(categoriesService,usersService);
 
         const promptsDal = new PromptsDal(this.dbConn);
-        const promptsService = new PromptsService(promptsDal, subCategoriesDal);
+        const promptsService = new PromptsService(promptsDal, categoriesDal);
         const promptsApi = new PromptsApi(promptsService);
 
     
-        this.setRoutes(userApi, promptsApi);
+        this.setRoutes(userApi, promptsApi, categoriesApi);
 }
 
     
 
-    private setRoutes(userApi: UsersApi, promptsApi: PromptsApi) {
+    private setRoutes(userApi: UsersApi, promptsApi: PromptsApi, categoriesApi: CategoriesApi) {
     
     this.app.use("/api/users", userApi.getRouter());
 
     this.app.use("/api/prompts", promptsApi.getRouter());
+
+    this.app.use("/api/categories", categoriesApi.getRouter());
 
     this.app.use(MiddlewareHandler.globalErrorHandler);
 

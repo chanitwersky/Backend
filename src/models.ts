@@ -1,14 +1,13 @@
-// import { ObjectId } from "mongodb";//להתקין את המודול של mongodb
+
 import { Schema, model } from 'mongoose';
 
-// export interface UserWithId extends User {
-//     _id?: ObjectId;
-// }
+
 
 export interface User {
     id: string;
     name: string;
     phoneNumber: string;
+    password: string;
     role:"user" | "admin";
     
 }
@@ -17,6 +16,7 @@ const UserSchema = new Schema<User>({
     id: { type: String, required: true, unique: true, index: true },
     name: { type: String, required: true },
     phoneNumber: { type: String, required: true },
+    password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], required: false, default: "user" }
 });
 

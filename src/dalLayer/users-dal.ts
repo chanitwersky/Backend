@@ -1,5 +1,6 @@
 import { Collection } from "mongodb";
 
+
 import DbConn from "../utils/db-conn";
 import { User as UserModel } from "../models";  
 
@@ -24,7 +25,7 @@ export default class usersDal {
     return await this.usersCollection.aggregate([
         {
             $lookup: {
-                from: "PromptModel",          
+                from: "Prompt",          
                 localField: "id",          
                 foreignField: "userId",    
                 as: "learningHistory"     

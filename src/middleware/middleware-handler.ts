@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'; 
+import mongoose from 'mongoose';
 
 import UsersService from '../serviceLayer/users-service';
 import AuthUtils from '../utils/auth-utils';
@@ -11,7 +12,7 @@ export default class MiddlewareHandler {
         return async (req: Request, res: Response, next: NextFunction) => {
             try {
                 const userId = (req as any).user.id;
-                const user = await userService.getUserById(userId); // עכשיו זה נגיש
+                const user = await userService.getUserById(userId); 
 
                 if (user && user.role === 'admin') {
                     return next();
@@ -134,4 +135,47 @@ public static globalErrorHandler(err: any, req: Request, res: Response, next: Ne
         message: "התרחשה שגיאה בלתי צפויה במערכת, אנא נסה שוב מאוחר יותר"
     });
 }
+
+    public static validateCategoryInput(req: Request, res: Response, next: NextFunction) {
+        const { name } = req.body;
+
+        if (!name || typeof name !== 'string') {
+            return res.status(400).json({
+                message: "נא לשלוח שם קטגוריה תקין (categoryName)"
+            });
+        }
+
+        const trimmed = name.trim();
+
+        
+        if (trimmed.length < 2 || trimmed.length > 25) {
+            return res.status(400).json({
+                message: "שם הקטגוריה חייב להיות בין 2 ל-25 תווים"
+            });
+        }
+
+        req.body.categoryName = trimmed;
+        next();
+    }
+
+    public static validateSubCategoryInput(req: Request, res: Response, next: NextFunction) {
+        const { name, categoryId } = req.body;
+
+        if (!name || typeof name !== 'string') {
+            return res.status(400).json({
+                message: "נא לשלוח שם תת-קטגוריה תקין"
+            });
+        }
+
+        const trimmedSubName = name.trim();
+        if (trimmedSubName.length < 2 || trimmedSubName.length > 40) {
+            return res.status(400).json({
+                message: "שם תת-הקטגוריה חייב להיות בין 2 ל-40 תווים"
+            });
+        }
+
+        req.body.subCategoryName = trimmedSubName;
+        
+        next();
+    }
 }

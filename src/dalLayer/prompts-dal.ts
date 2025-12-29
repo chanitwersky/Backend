@@ -20,4 +20,6 @@ export default class promptsDal {
         return await this.promptsCollection.find({ userId: userId }).toArray();
     }
 
+    
+
 }
