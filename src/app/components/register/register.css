@@ -1,0 +1,121 @@
+/* מיכל ראשי שפורס את הכל על כל המסך */
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  direction: rtl; /* תמיכה בעברית */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+}
+
+/* הכרטיס הלבן של הטופס */
+.register-card {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* סדר לכל שדה קלט */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #444;
+}
+
+input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+/* אפקט כשהמשתמש לוחץ על התיבה */
+input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* עיצוב להודעות שגיאה */
+.error {
+  color: #d93025;
+  font-size: 13px;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+/* צבע מסגרת אדום כשיש שגיאה */
+input.ng-invalid.ng-touched {
+  border-color: #d93025;
+}
+
+/* צבע מסגרת ירוק כשהקלט תקין */
+input.ng-valid.ng-touched {
+  border-color: #28a745;
+}
+
+/* כפתור ההרשמה */
+button {
+  width: 100%;
+  padding: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* כפתור כבוי כשחסרים פרטים */
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* טקסט למטה למעבר להתחברות */
+.footer-text {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.footer-text a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer-text a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,28 @@
+<div class="register-wrapper"> <div class="register-card">
+    <h2>התחברות למערכת</h2>
+    <p>הזן פרטים כדי להמשיך</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      
+      <div class="form-group">
+        <label>מספר טלפון:</label>
+        <input type="tel" formControlName="phoneNumber" placeholder="05XXXXXXXX">
+        <div *ngIf="loginForm.get('phoneNumber')?.invalid && loginForm.get('phoneNumber')?.touched" class="error">
+          מספר טלפון לא תקין
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>סיסמה:</label>
+        <input type="password" formControlName="password" placeholder="הכנס סיסמה">
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+          שדה חובה
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid">התחבר</button>
+    </form>
+    
+    <p class="footer-text">עדיין אין לך חשבון? <a routerLink="/register">הירשם כאן</a></p>
+  </div>
+</div>

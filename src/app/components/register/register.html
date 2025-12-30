@@ -1,0 +1,43 @@
+<div class="register-wrapper">
+  <div class="register-card">
+    <h2>יצירת חשבון חדש</h2>
+    
+    <form [formGroup]="signUpForm" (ngSubmit)="onRegister()">
+      
+      <div class="form-group">
+        <label>מספר זיהוי (ID):</label>
+        <input type="text" formControlName="id" placeholder="9 ספרות">
+        
+        <div *ngIf="signUpForm.get('id')?.invalid && signUpForm.get('id')?.touched" class="error">
+          ID חייב להכיל בדיוק 9 ספרות
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>שם מלא:</label>
+        <input type="text" formControlName="name" placeholder="שם ושם משפחה">
+        <div *ngIf="signUpForm.get('name')?.invalid && signUpForm.get('name')?.touched" class="error">
+          שם קצר מדי או שדה חובה
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>מספר טלפון:</label>
+        <input type="tel" formControlName="phoneNumber" placeholder="05XXXXXXXX">
+        <div *ngIf="signUpForm.get('phoneNumber')?.invalid && signUpForm.get('phoneNumber')?.touched" class="error">
+          מספר טלפון ישראלי לא תקין
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>סיסמה:</label>
+        <input type="password" formControlName="password" placeholder="אותיות גדולות/קטנות, מספר וסימן">
+        <div *ngIf="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched" class="error">
+          <small>הסיסמה חייבת לכלול 8 תווים, אות גדולה, קטנה, מספר וסימן.</small>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="signUpForm.invalid">הירשם עכשיו</button>
+    </form>
+  </div>
+</div>

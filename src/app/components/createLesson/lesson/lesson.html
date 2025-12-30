@@ -1,0 +1,41 @@
+<div class="register-wrapper">
+  <div class="register-card">
+    <h2>יצירת שיעור</h2>
+    <p>בחר את התחום הרצוי והוסף הנחיות</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="sendPrompt()">
+      
+      <div class="form-group">
+        <label>קטגוריה:</label>
+        <select formControlName="categoryId" (change)="onCategoryChange()">
+          <option value="">-- בחר קטגוריה --</option>
+          <option *ngFor="let cat of categories" [value]="cat.id">
+            {{ cat.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group" *ngIf="subCategories.length > 0">
+        <label>תת קטגוריה:</label>
+        <select formControlName="subCategoryId">
+          <option value="">-- בחר תת קטגוריה --</option>
+          <option *ngFor="let sub of subCategories" [value]="sub.id">
+            {{ sub.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group" *ngIf="loginForm.get('subCategoryId')?.value">
+        <label>הוסף הנחיה מפורטת לשיעור</label>
+        <textarea 
+          formControlName="additionalText" 
+          rows="4">
+        </textarea>
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid" class="submit-btn">
+      יצירת שיעור
+      </button>
+    </form>
+  </div>
+</div>
