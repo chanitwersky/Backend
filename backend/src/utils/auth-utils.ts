@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+
 const code=process.env.JWT_SECRET || '';
 export default class AuthUtils {
     static signJwt(payload:Object) {

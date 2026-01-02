@@ -1,5 +1,6 @@
-import usersService from "../serviceLayer/users-service";
 import { NextFunction, Request, Response } from "express";
+
+import usersService from "../serviceLayer/users-service";
 
 export default class UsersController {
 
@@ -50,41 +51,41 @@ export default class UsersController {
             }
         }
 
-    async getUserById(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const id=req.params.id;
+    // async getUserById(req: Request, res: Response, next: NextFunction): Promise<void> {
+    //     const id=req.params.id;
 
-        if(!id){
-            res.status(400).json({ message: "נא לספק את מזהה המשתמש" });
-            return;
-        }
+    //     if(!id){
+    //         res.status(400).json({ message: "נא לספק את מזהה המשתמש" });
+    //         return;
+    //     }
 
-        try {
-            const user = await this.usersService.getUserById(id);
-            res.status(200).json({  
-                success: true,
-                data: user
-            });
-        }catch(error){
-            console.error("Error in getting user", error);
-            res.status(500).json({ 
-                    success: false, 
-                    message: "תקלה בקבלת פרטי המשתמש"
-                });
-            next(error);
-        }
+    //     try {
+    //         const user = await this.usersService.getUserById(id);
+    //         res.status(200).json({  
+    //             success: true,
+    //             data: user
+    //         });
+    //     }catch(error){
+    //         console.error("Error in getting user", error);
+    //         res.status(500).json({ 
+    //                 success: false, 
+    //                 message: "תקלה בקבלת פרטי המשתמש"
+    //             });
+    //         next(error);
+    //     }
 
-    }
+    // }
 
     async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const { phoneNumber, password } = req.body;
+        const { id, password } = req.body;
 
-        if (!phoneNumber || !password) {
-            res.status(400).json({ message: "נא לספק מספר טלפון וסיסמה" });
+        if (!id || !password) {
+            res.status(400).json({ message: "נא לספק מספר זהות וסיסמה" });
             return;
         }
 
-        const result = await this.usersService.login(phoneNumber, password);
+        const result = await this.usersService.login(id, password);
         
         res.status(200).json({
             success: true,

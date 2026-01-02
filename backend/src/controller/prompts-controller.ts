@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import AiService from '../serviceLayer/aiService'; 
-import { Prompt as PromptModel } from "../models";
+
 import promptsService from '../serviceLayer/prompts-service';
 
  
@@ -8,14 +7,15 @@ import promptsService from '../serviceLayer/prompts-service';
 export default class PromptController {
     
     constructor(private promptsService: promptsService) {}
+
    
     async createPrompt(req: any, res: Response, next: NextFunction): Promise<void> {
-    try { // וודא שה-try קיים כאן
+    try { 
         console.log("--- DEBUG START ---");
         console.log("Full User Object from Token:", req.user);
         console.log("Body received:", req.body);
         
-        // שלב 1: חילוץ ה-ID בצורה בטוחה
+        
         const userId = req.user?.id || req.user?._id; 
         console.log("Extracted userId:", userId);
         
@@ -27,7 +27,6 @@ export default class PromptController {
              return;
         }
 
-        // שלב 2: קריאה ל-Service
         const lesson = await this.promptsService.createPrompt(userId, category, subCategory, promptText);
         
         res.status(200).json({
@@ -68,7 +67,7 @@ export default class PromptController {
     }
 
 
-    async getPromptById(req: any, res: Response,next: NextFunction):Promise<void>{
+    async getPromptsById(req: any, res: Response,next: NextFunction):Promise<void>{
         try{
             const id= req.params.userId;
             const loggedInUserId = req.user.id;

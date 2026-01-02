@@ -1,16 +1,15 @@
+import bcrypt from 'bcrypt';
 
 import UsersDal from "../dalLayer/users-dal";
 import { User as UserModel } from "../models";
 import AuthUtils from "../utils/auth-utils";
-import bcrypt from 'bcrypt';
+
 
 export default class UsersService {
     
     constructor(private usersDal: UsersDal) {}
 
     
-
-
     async createUser(id: string, name: string, phoneNumber: string,password:string):Promise<any>{
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -51,9 +50,9 @@ export default class UsersService {
         return await this.usersDal.getUserById(id);
     }
 
-    async login(phoneNumber: string, password: string): Promise<any> {
+    async login(id: string, password: string): Promise<any> {
     
-    const user = await this.usersDal.getUserByPhoneNumber(phoneNumber);
+    const user = await this.usersDal.getUserById(id);
     
     if (!user) {
         throw new Error("משתמש לא קיים במערכת");

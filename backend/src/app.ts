@@ -1,8 +1,9 @@
 import express, {Express} from "express";
 import dotenv from 'dotenv';
+import cors from "cors";
 dotenv.config();
 import DbConn from "./utils/db-conn";
-import cors from "cors";
+
 import UsersDal from "./dalLayer/users-dal";
 import UsersService from "./serviceLayer/users-service";
 import UsersApi from "./routes/users-api";

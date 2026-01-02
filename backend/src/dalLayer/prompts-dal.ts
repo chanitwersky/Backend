@@ -7,6 +7,7 @@ const PROMPTS_COLLECTION_NAME = "PromptModel";
 
 export default class promptsDal {
     private promptsCollection: Collection<PromptModel>;
+
     constructor(dbConn: DbConn) {
         this.promptsCollection = dbConn.getLearningDB().collection(PROMPTS_COLLECTION_NAME);
     }
@@ -14,11 +15,11 @@ export default class promptsDal {
     async createPrompt(prompt: PromptModel): Promise<string> {
         try {
             const result = await this.promptsCollection.insertOne(prompt);
-            console.log("Insert result:", result); // בדוק אם מודפס בטרמינל
+            console.log("Insert result:", result); 
             return prompt.response;
         } catch (error) {
             console.error("שגיאה בשמירה ל-DB:", error);
-            throw error; // חשוב לזרוק את השגיאה כדי שה-Controller ידע שמשהו השתבש
+            throw error; 
     }
     }
 
@@ -27,15 +28,15 @@ export default class promptsDal {
     }
 
     async getLastPrompt(userId: string): Promise<string> {
-    const results = await this.promptsCollection
-        .find({ userId: userId })
-        .sort({ _id: -1 })
-        .limit(1) 
-        .project({ response: 1, _id: 0 })         
-        .toArray();
+        const results = await this.promptsCollection
+            .find({ userId: userId })
+            .sort({ _id: -1 })
+            .limit(1) 
+            .project({ response: 1, _id: 0 })         
+            .toArray();
 
-    return results[0].response
-}
+        return results[0].response
+    }
 
     
 

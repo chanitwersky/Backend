@@ -1,9 +1,12 @@
 import { NextFunction,Request,Response } from "express";
+
 import CategoriesServise from "../serviceLayer/categories-service";
 
 
 export default class categoriesController {
+
     constructor(private categoriesService: CategoriesServise) {}
+    
     async createCategory(req: Request, res: Response,next: NextFunction): Promise<void> {
         try {
             const {  name } = req.body;

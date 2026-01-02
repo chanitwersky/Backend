@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken'; 
-import mongoose from 'mongoose';
 
 import UsersService from '../serviceLayer/users-service';
 import AuthUtils from '../utils/auth-utils';
@@ -25,46 +23,46 @@ export default class MiddlewareHandler {
     }
 
     public static validateNewUser(req: Request, res: Response, next: NextFunction) {
-    const { name, phoneNumber, id } = req.body;
+        const { name, phoneNumber, id } = req.body;
 
-    if (!name || !phoneNumber || !id) {
-        return res.status(400).json({ 
+        if (!name || !phoneNumber || !id) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "כל השדות (שם, טלפון, מספר זיהוי) הם חובה" 
+            });
+        }
+
+        
+        const nameRegex = /^[a-zA-Zא-ת\s]{3,30}$/;
+        if (!nameRegex.test(name)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "שם לא תקין (חייב להכיל לפחות 3 אותיות ללא תווים מיוחדים)" 
+            });
+        }
+
+        const phoneRegex = /^05\d{8}$|^0\d{8,9}$/;
+        if (!phoneRegex.test(phoneNumber.replace(/-/g, ""))) { 
+            return res.status(400).json({ 
+                success: false, 
+                message: "מספר טלפון לא תקין (צריך להיות בפורמט ישראלי)" 
+            });
+        }
+
+        const idRegex = /^\d{9}$/; 
+
+        if (!idRegex.test(id)) {
+            return res.status(400).json({ 
             success: false, 
-            message: "כל השדות (שם, טלפון, מספר זיהוי) הם חובה" 
+            message: "מספר זיהוי לא תקין - חייב להכיל בדיוק 9 ספרות" 
         });
-    }
+        }
 
-    
-    const nameRegex = /^[a-zA-Zא-ת\s]{3,30}$/;
-    if (!nameRegex.test(name)) {
-        return res.status(400).json({ 
-            success: false, 
-            message: "שם לא תקין (חייב להכיל לפחות 3 אותיות ללא תווים מיוחדים)" 
-        });
-    }
-
-    const phoneRegex = /^05\d{8}$|^0\d{8,9}$/;
-    if (!phoneRegex.test(phoneNumber.replace(/-/g, ""))) { 
-        return res.status(400).json({ 
-            success: false, 
-            message: "מספר טלפון לא תקין (צריך להיות בפורמט ישראלי)" 
-        });
-    }
-
-    const idRegex = /^\d{9}$/; 
-
-    if (!idRegex.test(id)) {
-        return res.status(400).json({ 
-        success: false, 
-        message: "מספר זיהוי לא תקין - חייב להכיל בדיוק 9 ספרות" 
-    });
-    }
-
-    next();
-    }
+        next();
+        }
 
     //לשנות את המפתח הסודי למשהו חזק יותר בסביבת הייצור
-    private readonly JWT_SECRET = "your_super_secret_key_123";
+    private readonly JWT_SECRET = process.env.JWT_SECRET || '';
 
     public verifyToken = (req: any, res: Response, next: NextFunction) => {
         try {
@@ -122,19 +120,19 @@ export default class MiddlewareHandler {
     }
 
    
-public static globalErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
-    
-    console.error("Caught by Global Error Handler:", err);
+    public static globalErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+        
+        console.error("Caught by Global Error Handler:", err);
 
-    if (res.headersSent) {
-        return next(err);
+        if (res.headersSent) {
+            return next(err);
+        }
+
+        res.status(500).json({
+            success: false,
+            message: "התרחשה שגיאה בלתי צפויה במערכת, אנא נסה שוב מאוחר יותר"
+        });
     }
-
-    res.status(500).json({
-        success: false,
-        message: "התרחשה שגיאה בלתי צפויה במערכת, אנא נסה שוב מאוחר יותר"
-    });
-}
 
     public static validateCategoryInput(req: Request, res: Response, next: NextFunction) {
         const { name } = req.body;
