@@ -5,10 +5,10 @@
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
       
       <div class="form-group">
-        <label>מספר טלפון:</label>
-        <input type="tel" formControlName="phoneNumber" placeholder="05XXXXXXXX">
+        <label>מספר זהות:</label>
+        <input formControlName="id" type="text" placeholder="הכנס מספר זהות">
         <div *ngIf="loginForm.get('phoneNumber')?.invalid && loginForm.get('phoneNumber')?.touched" class="error">
-          מספר טלפון לא תקין
+         מספר זהות לא תקין
         </div>
       </div>
 

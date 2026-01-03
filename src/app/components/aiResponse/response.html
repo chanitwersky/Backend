@@ -2,8 +2,7 @@
   <div class="res-card" *ngIf="answer; else loading">
     <h2>השיעור המוכן שלך</h2>
     
-    <div class="answer-content">
-      {{ answer }}
+    <div class="answer-content" [innerHTML]="formatMarkdown(answer)">
     </div>
 
     <button class="submit-btn" type="button" (click)="createNewLesson()">

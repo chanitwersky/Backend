@@ -33,9 +33,22 @@ h2 {
   color: #444;
   line-height: 1.8;
   font-size: 18px;
-  white-space: pre-wrap; /* קריטי לשמירה על המבנה של ה-AI */
   text-align: right;
+
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+
+  pointer-events: auto;
 }
+
+.answer-content a {
+  direction: ltr;
+  unicode-bidi: plaintext;
+  display: inline-block;
+  max-width: 100%;
+  word-break: break-all;
+}
+
 
 /* כפתור חזרה או יצירה מחדש בסגנון שלך */
 .back-button {

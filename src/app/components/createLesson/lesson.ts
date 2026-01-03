@@ -1,78 +1,61 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; 
-import { CommonModule } from '@angular/common'; 
-import { Create } from '../../service/lesson/create'; // וודאי שהקובץ הזה קיים בנתיב הזה
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+
+import { Create } from '../../service/lesson/create';
 import { AuthService } from '../../service/user/auth.service';
 
 @Component({
   selector: 'app-lesson',
-  standalone: true, 
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './lesson.html',
   styleUrl: './lesson.css',
 })
 export class CreateLessonComponent implements OnInit {
-  loginForm: FormGroup;
+  private fb = inject(FormBuilder);
+  
   categories: any[] = [];
   subCategories: any[] = [];
   userId: any;
 
+  loginForm = this.fb.group({
+    categoryName: ['', Validators.required],
+    subCategoryName: ['', Validators.required],
+    additionalText: ['', Validators.required]
+  });
+
   constructor(
-    private fb: FormBuilder,
-    private createService: Create, 
+    private createService: Create,
     private authService: AuthService,
     private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-      categoryId: ['', Validators.required],
-      subCategoryId: ['', Validators.required],
-      additionalText: ['', Validators.required]
-    });
-  }
+  ) {}
 
   ngOnInit() {
+  
     const user = this.authService.getUserData();
-    
-    // בדיקה שהמשתמש קיים לפני שניגשים ל-ID שלו
     if (user) {
-      this.userId = user.id ; 
-      console.log('המזהה של המשתמש המחובר:', this.userId);
-    } else {
-      console.warn('לא נמצא משתמש מחובר');
+      this.userId = user.id;
     }
 
     this.createService.showCategories({}).subscribe({
       next: (data: any) => {
         this.categories = data;
-        console.log('הנתונים שהגיעו מהשרת:', data);
       },
       error: (err: any) => console.error('שגיאה בטעינת קטגוריות', err)
     });
   }
 
-  onCategoryChange() {
-    const selectedId = this.loginForm.get('categoryId')?.value;
-    const selectedCat = this.categories.find(c => c.id == selectedId);
-
-    this.subCategories = selectedCat ? selectedCat.learningHistory : [];
-
-    this.loginForm.patchValue({ subCategoryId: '' }); 
-}
-
-  
-
-
   sendPrompt() {
     if (this.loginForm.valid) {
       const formValues = this.loginForm.value;
-      const categoryName = this.categories.find(c => c.id == formValues.categoryId)?.name;
-      const subCategoryName = this.subCategories.find(s => s.id == formValues.subCategoryId)?.name;
 
       const dataToSend = {
-        category: categoryName,
-        subCategory: subCategoryName,
-        promptText: formValues.additionalText
+        category: formValues.categoryName,
+        subCategory: formValues.subCategoryName,
+        promptText: formValues.additionalText,
+        userId: this.userId 
       };
 
       this.createService.sendPrompt(dataToSend).subscribe({
@@ -86,4 +69,21 @@ export class CreateLessonComponent implements OnInit {
       });
     }
   }
+
+  onCategoryInput() {
+    const selectedName = this.loginForm.get('categoryName')?.value;
+
+    this.loginForm.get('subCategoryName')?.setValue('');
+    
+    const selectedCat = this.categories.find(c => c.name === selectedName);
+
+    if (selectedCat && selectedCat.learningHistory) {
+      this.subCategories = selectedCat.learningHistory;
+
+    } else {
+      this.subCategories = [];
+    }
+  }
+
+
 }

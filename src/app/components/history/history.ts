@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { Create } from "../../service/lesson/create";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { marked } from 'marked';
+
+import { Create } from "../../service/lesson/create";
 
 @Component({
   selector: 'app-history',
@@ -10,26 +13,38 @@ import { RouterModule } from "@angular/router";
   templateUrl: './history.html',
   styleUrls: ['./history.css']
 })
-// history.component.ts
-export class HistoryComponent implements OnInit {
-  userHistory: any[] = [];
 
-  constructor(private promptService: Create) {}
+export class HistoryComponent implements OnInit {
+
+  userHistory: any[] = [];
+  isLoading: boolean = true;
+
+  constructor(private promptService: Create,private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.promptService.getUsersHistory().subscribe({
       next: (res) => {
-      console.log('--- תשובה גולמית מהשרת ---', res); // כאן נראה הכל
-  
-  // בדיקה חכמה: אם יש res.data נשתמש בו, אם לא ננסה את res עצמו
-      if (res && res.data) {
-        this.userHistory = res.data;
-      } else if (Array.isArray(res)) {
-        this.userHistory = res; // אולי השרת מחזיר ישר מערך?
-      } else {
-        this.userHistory = res.prompts || []; // אולי זה תחת שם אחר?
+        console.log('--- תשובה גולמית מהשרת ---', res);
+        this.isLoading = false;
+
+        if (res && res.data) {
+          this.userHistory = res.data;
+        } else if (Array.isArray(res)) {
+          this.userHistory = res;
+        } else {
+          this.userHistory = res.prompts || [];
+        }
+      },
+      error: (err) => {
+        this.isLoading = false; 
       }
-  },
-  });
+    });
+  }
+
+
+  formatMarkdown(text: string) {
+    const clean = text.replace(/^\s+/gm, '');
+    const html = marked.parse(clean) as string;
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 }

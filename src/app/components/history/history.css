@@ -7,7 +7,6 @@
   padding: 40px 20px;
 }
 
-/* כותרת הדף - סגנון זהה ל-h2 ב-Auth */
 .history-header h2 {
   text-align: center;
   color: #333;
@@ -22,7 +21,6 @@
   margin-bottom: 40px;
 }
 
-/* גריד של כרטיסים */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -31,7 +29,6 @@
   margin: 0 auto;
 }
 
-/* כרטיס ההיסטוריה - מבוסס על .register-card */
 .history-card {
   background: white;
   padding: 25px;
@@ -40,6 +37,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* מבטיח שכלום לא יבלוט החוצה */
 }
 
 .history-card:hover {
@@ -51,19 +49,13 @@
   font-size: 13px;
   color: #888;
   margin-bottom: 10px;
-  text-align: left; /* התאריך משמאל */
+  text-align: left;
 }
 
-/* תגיות קטגוריה - סטייל עדין */
-.card-section small {
-  display: inline-block;
-  background-color: #eef2f7;
-  color: #007bff;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 12px;
-  margin-bottom: 15px;
+.divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 20px 0;
 }
 
 .label {
@@ -74,20 +66,7 @@
   font-size: 15px;
 }
 
-.question-text {
-  color: #555;
-  font-size: 16px;
-  line-height: 1.5;
-  margin-bottom: 0;
-}
-
-.divider {
-  height: 1px;
-  background-color: #eee;
-  margin: 20px 0;
-}
-
-/* אזור התשובה - נראה כמו שדה Input לקריאה בלבד */
+/* אזור התשובה המתוקן - כאן קרה הקסם */
 .answer-text {
   color: #444;
   background-color: #f8f9fa;
@@ -95,11 +74,23 @@
   border-radius: 8px;
   font-size: 15px;
   line-height: 1.6;
-  border-right: 4px solid #007bff; /* פס כחול מודגש לתשובה */
-  white-space: pre-wrap;
+  border-right: 4px solid #007bff;
+  
+  /* פקודות למניעת בריחת קישורים */
+  white-space: pre-wrap;       /* שומר על ירידות שורה */
+  word-wrap: break-word;      /* שובר מילים ארוכות */
+  overflow-wrap: anywhere;    /* פקודה חזקה שמוודאת שהטקסט לא יצא מהדיב */
+  word-break: break-word;
+  max-width: 100%;            /* מגביל לרוחב הכרטיס */
 }
 
-/* עיצוב הודעת "אין נתונים" - מבוסס על ה-Card */
+/* עיצוב קישורים בתוך התשובה כדי שייראו לחיצים */
+.answer-text a {
+  color: #007bff;
+  text-decoration: underline;
+  word-break: break-all;      /* שבירה ספציפית לכתובות URL ארוכות */
+}
+
 .no-data {
   background: white;
   padding: 40px;
@@ -110,24 +101,58 @@
   text-align: center;
 }
 
-/* כפתור "צור שיעור" - זהה לכפתור ה-Auth */
 .btn-primary {
   display: inline-block;
-  width: auto;
   min-width: 200px;
   padding: 14px 25px;
   background-color: #007bff;
   color: white;
-  border: none;
   border-radius: 8px;
   font-size: 18px;
   font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
   text-decoration: none;
   margin-top: 15px;
 }
 
-.btn-primary:hover {
-  background-color: #0056b3;
+
+/* ניקוי רווחים מיותרים שנוצרים מה-Markdown */
+.answer-text ::ng-deep p {
+  margin: 0 0 10px 0; /* רווח קטן בין פסקאות במקום רווח ענק */
+  display: block;
+}
+
+.answer-text ::ng-deep h1, 
+.answer-text ::ng-deep h2, 
+.answer-text ::ng-deep h3 {
+  margin: 15px 0 8px 0;
+  font-size: 1.1rem; /* גודל כותרת אחיד ונעים */
+  color: #333;
+  font-weight: bold;
+}
+
+.answer-text ::ng-deep ul, 
+.answer-text ::ng-deep ol {
+  margin: 10px 0;
+  padding-right: 25px; /* רווח קטן לבולטים מימין */
+}
+
+.answer-text ::ng-deep li {
+  margin-bottom: 5px;
+}
+
+/* עיצוב הקישורים שיהיו לחיצים וברורים */
+.answer-text ::ng-deep a {
+  color: #007bff !important;
+  text-decoration: underline !important;
+  font-weight: 600;
+  cursor: pointer !important;
+  pointer-events: auto !important; /* קריטי כדי שיהיה לחיץ */
+  display: inline;
+}
+
+/* הסרת ה-white-space: pre-wrap שגרם לרווחים בתמונה 84b42c */
+.answer-text {
+  white-space: normal !important; 
+  line-height: 1.5;
+  text-align: right;
 }

@@ -5,7 +5,9 @@ import {  Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
+
 export class Create {
+
     private apiUrlc = 'http://127.0.0.1:5000/api/categories'; 
     private apiUrlp = 'http://127.0.0.1:5000/api/prompts';
     private apiUrlu = 'http://127.0.0.1:5000/api/users';
@@ -26,7 +28,7 @@ export class Create {
             'Authorization': `Bearer ${token}`
         });
 
-        return this.http.post<any>(this.apiUrlp, credentials, { headers });
+        return this.http.post<any>(`${this.apiUrlp}/`, credentials, { headers });
     }
 
     
@@ -39,15 +41,14 @@ export class Create {
     }
 
     getUsersHistory(): Observable<any> {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId'); // שליפת ה-ID ששמרת ב-Login
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId'); 
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
 
-    const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.get<any>(`${this.apiUrlp}/${userId}`, { headers });
-}
+        return this.http.get<any>(`${this.apiUrlp}/${userId}`, { headers });
+    }
 
     getAllUsersWithHistory(): Observable<any> {
         const token = localStorage.getItem('token');

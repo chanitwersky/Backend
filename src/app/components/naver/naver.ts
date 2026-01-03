@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
 import { AuthService } from "../../service/user/auth.service"
 
 @Component({
@@ -9,6 +10,7 @@ import { AuthService } from "../../service/user/auth.service"
   templateUrl: './naver.html',
   styleUrl: './naver.css',
 })
+
 export class NavbarComponent implements OnInit {
 
   userRole!: string | null;
@@ -44,9 +46,10 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/admin']); 
   }
 
-  // פונקציות הניווט (אותן פונקציות שכתבנו קודם)
   goToHome() { this.router.navigate(['/home']); }
+
   goToLesson() { this.router.navigate(['/lesson']); }
+  
   goToHistory() { this.router.navigate(['/history'])}; 
  
   }

@@ -7,34 +7,42 @@
       
       <div class="form-group">
         <label>קטגוריה:</label>
-        <select formControlName="categoryId" (change)="onCategoryChange()">
-          <option value="">-- בחר קטגוריה --</option>
-          <option *ngFor="let cat of categories" [value]="cat.id">
-            {{ cat.name }}
-          </option>
-        </select>
+        <input 
+          type="text" 
+          list="categoriesList" 
+          formControlName="categoryName" 
+          (input)="onCategoryInput()" 
+          placeholder="בחר או הקלד קטגוריה חדשה"
+          class="form-control">
+        <datalist id="categoriesList">
+          <option *ngFor="let cat of categories" [value]="cat.name"></option>
+        </datalist>
       </div>
 
-      <div class="form-group" *ngIf="subCategories.length > 0">
+      <div class="form-group" *ngIf="loginForm.get('categoryName')?.value">
         <label>תת קטגוריה:</label>
-        <select formControlName="subCategoryId">
-          <option value="">-- בחר תת קטגוריה --</option>
-          <option *ngFor="let sub of subCategories" [value]="sub.id">
-            {{ sub.name }}
-          </option>
-        </select>
+        <input 
+          type="text" 
+          list="subCategoriesList" 
+          formControlName="subCategoryName" 
+          placeholder="בחר או הקלד תת-קטגוריה"
+          class="form-control">
+        <datalist id="subCategoriesList">
+          <option *ngFor="let sub of subCategories" [value]="sub.name"></option>
+        </datalist>
       </div>
 
-      <div class="form-group" *ngIf="loginForm.get('subCategoryId')?.value">
+      <div class="form-group" *ngIf="loginForm.get('subCategoryName')?.value">
         <label>הוסף הנחיה מפורטת לשיעור</label>
         <textarea 
           formControlName="additionalText" 
-          rows="4">
+          rows="4"
+          placeholder="">
         </textarea>
       </div>
 
       <button type="submit" [disabled]="loginForm.invalid" class="submit-btn">
-      יצירת שיעור
+        יצירת שיעור
       </button>
     </form>
   </div>

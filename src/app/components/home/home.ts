@@ -8,11 +8,11 @@ import { CommonModule } from "@angular/common"; // חשוב עבור ה-ngIf
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
+
 export class HomeComponent implements OnInit {
+
   userName: string | null = '';
   userRole: string | null = '';
-
-  constructor() {}
 
   ngOnInit(): void {
     this.userName = localStorage.getItem('userName');

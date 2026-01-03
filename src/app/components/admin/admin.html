@@ -47,7 +47,11 @@
     </table>
   </div>
 
-  <div *ngIf="allUserHistory?.length === 0" class="no-data-card">
-    <p>לא נמצאו נתונים להצגה.</p>
+  <div *ngIf="!isLoading && allUserHistory.length === 0" class="no-data">
+    <p>לא נמצאו משתמשים במערכת.</p>
+  </div>
+
+  <div *ngIf="isLoading" class="loader">
+    <p>טוען נתונים מהשרת...</p>
   </div>
 </div>

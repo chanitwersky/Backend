@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../service/user/auth.service'; // ודאי שהנתיב ל-Service נכון
 import { Router, RouterModule } from '@angular/router';
+
+import { AuthService } from '../../service/user/auth.service'; 
+
 
 @Component({
   selector: 'app-login',
@@ -14,9 +16,9 @@ import { Router, RouterModule } from '@angular/router';
 export class LoginComponent {
 
     private authService = inject(AuthService);
-  // ב-Login אנחנו צריכים רק טלפון וסיסמה
+  
     loginForm = new FormGroup({
-    phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^05\\d{8}$')]),
+    id: new FormControl('', [Validators.required, Validators.pattern('^\\d{9}$')]),
     password: new FormControl('', [Validators.required])
   });
 
@@ -31,20 +33,20 @@ export class LoginComponent {
         localStorage.setItem('token', res.token); 
         localStorage.setItem('role', userData.role); 
         localStorage.setItem('userName', userData.name);
-        localStorage.setItem('userId', userData.id || res.id); 
+        localStorage.setItem('userId', userData.id ); 
         this.authService.updateUserStatus();
-        alert('ברוך הבא!');
+        // alert('ברוך הבא!');
         
         this.router.navigate(['/home']);
       },
       error: (err: any) => {
         console.error('שגיאה בהתחברות:', err);
-        alert('מספר טלפון או סיסמה שגויים');
+        alert('מספר זהות או סיסמה שגויים');
       }
     });
     }
   }
-      goToRegister() {
-      this.router.navigate(['/register']); 
-    }
+  goToRegister() {
+    this.router.navigate(['/register']); 
+  }
 }
