@@ -9,9 +9,9 @@ export default class aiService {
         const prompt = `
         אתה מורה מקצועי ומנוסה. התפקיד שלך הוא ליצור שיעור מקיף ומעניין בעברית.
         
-        הנושא: ${promptText}
         קטגוריה: ${Category}
         תת-קטגוריה: ${subCategory}
+         הנושא: ${promptText}
 
         מבנה השיעור הנדרש:
         1. הסבר מפורט וברור על הנושא.
@@ -35,13 +35,12 @@ export default class aiService {
         // אנחנו עושים "כאילו" אנחנו פונים ל-AI
         console.log(`Mocking lesson for: ${promptText}`);
 
-        // סימולציה של המתנה לשרת (1.5 שניות)
+        //  של המתנה לשרת (1.5 שניות)
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        // זה המוק - טקסט בפורמט Markdown כפי שביקשת מה-AI
         const mockResponse = `
-            # שיעור בנושא: ${promptText}
-            ## קטגוריה: ${Category} | תת-קטגוריה: ${subCategory}
+            # שיעור בנושא: ${subCategory}
+            ## קטגוריה: ${Category} 
 
             ### 1. הסבר על הנושא
             זהו הסבר מפורט ומקצועי על המושג **${promptText}**. בשיעור זה נלמד על המאפיינים העיקריים ועל החשיבות של הנושא בעולם המודרני. הטקסט כאן נוצר על ידי ה-Mock כדי לעזור לך לעצב את דף התוצאה.
@@ -52,7 +51,7 @@ export default class aiService {
             * **סיכום:** תמיד כדאי לחזור על החומר פעם נוספת.
 
             ### 3. מקורות נוספים
-            * **יוטיוב:** [מדריך וידאו בנושא ${promptText}](https://www.youtube.com/results?search_query=${encodeURIComponent(promptText)})
+            * **יוטיוב:** [מדריך וידאו בנושא ${subCategory}](https://www.youtube.com/results?search_query=${encodeURIComponent(subCategory)})
             * **ויקיפדיה:** [קרא עוד בויקיפדיה](https://he.wikipedia.org/wiki/${encodeURIComponent(promptText)})
                 `;
 
