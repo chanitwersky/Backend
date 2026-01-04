@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # שירות בסיס הנתונים
+  mongo_db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # שירות האפליקציה שלך
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      # חשוב: כאן אנחנו משנים את ה-URL של ה-DB לשם של השירות (mongo_db)
+      - DB_URL=mongodb://mongo_db:27017/learning
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongo_db
+
+volumes:
+  mongo_data:
+
+
+  
